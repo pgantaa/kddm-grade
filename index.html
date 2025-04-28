@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grade Calculator</title>
+</head>
+<body>
+    <h2>Assignment & Exam Target Calculator</h2>
+
+    <form id="gradeForm">
+        <label>Enter either:</label><br><br>
+
+        Total Assignment Score (out of 40): <br>
+        <input type="number" id="totalScore" placeholder="e.g., 37"><br><br>
+
+        OR<br><br>
+
+        Assignment Scores (out of 10 each):<br>
+        <input type="number" id="a1" placeholder="Assignment 1">
+        <input type="number" id="a2" placeholder="Assignment 2">
+        <input type="number" id="a3" placeholder="Assignment 3">
+        <input type="number" id="a4" placeholder="Assignment 4">
+        <input type="number" id="a5" placeholder="Assignment 5"><br><br>
+
+        <button type="button" onclick="calculate()">Calculate</button>
+    </form>
+
+    <h3 id="result"></h3>
+
+    <script>
+    function calculate() {
+        let totalScore = document.getElementById('totalScore').value;
+        let scores = [
+            document.getElementById('a1').value,
+            document.getElementById('a2').value,
+            document.getElementById('a3').value,
+            document.getElementById('a4').value,
+            document.getElementById('a5').value
+        ].map(Number).filter(x => !isNaN(x));
+
+        let assignmentTotal = 0;
+        if (totalScore) {
+            assignmentTotal = parseFloat(totalScore);
+        } else if (scores.length > 0) {
+            assignmentTotal = scores.reduce((a, b) => a + b, 0);
+        } else {
+            document.getElementById('result').innerText = "Please enter some scores.";
+            return;
+        }
+
+        let assignmentPercentage = (assignmentTotal / 40) * 100;
+        let weightedAssignment = assignmentPercentage * 0.4;
+
+        let neededTotal = 90;
+        let neededFromExam = neededTotal - weightedAssignment;
+        let minExamScore = neededFromExam / 0.6;
+
+        if (minExamScore > 100) {
+            document.getElementById('result').innerText = "Unfortunately, it's not possible to achieve an A.";
+        } else {
+            document.getElementById('result').innerText = "You need at least " + minExamScore.toFixed(2) + "% in the exam to achieve an A (>90%).";
+        }
+    }
+    </script>
+</body>
+</html>
