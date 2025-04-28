@@ -78,7 +78,7 @@
 
 <script>
 function calculate() {
-    let totalScore = document.getElementById('totalScore').value;
+    let totalScoreInput = document.getElementById('totalScore').value;
     let scores = [
         document.getElementById('a1').value,
         document.getElementById('a2').value,
@@ -88,9 +88,17 @@ function calculate() {
     ].map(Number).filter(x => !isNaN(x));
 
     let assignmentTotal = 0;
-    if (totalScore) {
-        assignmentTotal = parseFloat(totalScore);
+    if (totalScoreInput) {
+        assignmentTotal = parseFloat(totalScoreInput);
+        if (assignmentTotal < 0 || assignmentTotal > 40) {
+            document.getElementById('result').innerText = "Error: Total assignment score must be between 0 and 40.";
+            return;
+        }
     } else if (scores.length > 0) {
+        if (scores.some(score => score < 0 || score > 8)) {
+            document.getElementById('result').innerText = "Error: Each individual assignment score must be between 0 and 8.";
+            return;
+        }
         assignmentTotal = scores.reduce((a, b) => a + b, 0);
     } else {
         document.getElementById('result').innerText = "Please enter your scores.";
